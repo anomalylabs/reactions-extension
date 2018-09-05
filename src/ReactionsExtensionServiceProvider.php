@@ -1,80 +1,29 @@
 <?php namespace Anomaly\ReactionsExtension;
 
+use Anomaly\ReactionsExtension\Reaction\Contract\ReactionRepositoryInterface;
+use Anomaly\ReactionsExtension\Reaction\ReactionModel;
+use Anomaly\ReactionsExtension\Reaction\ReactionRepository;
 use Anomaly\Streams\Platform\Addon\AddonServiceProvider;
-use Illuminate\Routing\Router;
+use Anomaly\Streams\Platform\Model\EloquentModel;
+use Anomaly\Streams\Platform\Model\Reactions\ReactionsReactionsEntryModel;
 
+/**
+ * Class ReactionsExtensionServiceProvider
+ *
+ * @link   http://pyrocms.com/
+ * @author PyroCMS, Inc. <support@pyrocms.com>
+ * @author Ryan Thompson <ryan@pyrocms.com>
+ */
 class ReactionsExtensionServiceProvider extends AddonServiceProvider
 {
 
     /**
-     * Additional addon plugins.
+     * The addon plugins.
      *
-     * @type array|null
+     * @var array
      */
-    protected $plugins = [];
-
-    /**
-     * The addon Artisan commands.
-     *
-     * @type array|null
-     */
-    protected $commands = [];
-
-    /**
-     * The addon's scheduled commands.
-     *
-     * @type array|null
-     */
-    protected $schedules = [];
-
-    /**
-     * The addon API routes.
-     *
-     * @type array|null
-     */
-    protected $api = [];
-
-    /**
-     * The addon routes.
-     *
-     * @type array|null
-     */
-    protected $routes = [];
-
-    /**
-     * The addon middleware.
-     *
-     * @type array|null
-     */
-    protected $middleware = [
-        //Anomaly\ReactionsExtension\Http\Middleware\ExampleMiddleware::class
-    ];
-
-    /**
-     * The addon route middleware.
-     *
-     * @type array|null
-     */
-    protected $routeMiddleware = [];
-
-    /**
-     * The addon event listeners.
-     *
-     * @type array|null
-     */
-    protected $listeners = [
-        //Anomaly\ReactionsExtension\Event\ExampleEvent::class => [
-        //    Anomaly\ReactionsExtension\Listener\ExampleListener::class,
-        //],
-    ];
-
-    /**
-     * The addon alias bindings.
-     *
-     * @type array|null
-     */
-    protected $aliases = [
-        //'Example' => Anomaly\ReactionsExtension\Example::class
+    protected $plugins = [
+        ReactionsExtensionPlugin::class,
     ];
 
     /**
@@ -82,71 +31,51 @@ class ReactionsExtensionServiceProvider extends AddonServiceProvider
      *
      * @type array|null
      */
-    protected $bindings = [];
+    protected $bindings = [
+        ReactionsReactionsEntryModel::class => ReactionModel::class,
+    ];
 
     /**
      * The addon singleton bindings.
      *
      * @type array|null
      */
-    protected $singletons = [];
-
-    /**
-     * Additional service providers.
-     *
-     * @type array|null
-     */
-    protected $providers = [
-        //\ExamplePackage\Provider\ExampleProvider::class
-    ];
-
-    /**
-     * The addon view overrides.
-     *
-     * @type array|null
-     */
-    protected $overrides = [
-        //'streams::errors/404' => 'module::errors/404',
-        //'streams::errors/500' => 'module::errors/500',
-    ];
-
-    /**
-     * The addon mobile-only view overrides.
-     *
-     * @type array|null
-     */
-    protected $mobile = [
-        //'streams::errors/404' => 'module::mobile/errors/404',
-        //'streams::errors/500' => 'module::mobile/errors/500',
+    protected $singletons = [
+        ReactionRepositoryInterface::class => ReactionRepository::class,
     ];
 
     /**
      * Register the addon.
-     */
-    public function register()
-    {
-        // Run extra pre-boot registration logic here.
-        // Use method injection or commands to bring in services.
-    }
-
-    /**
-     * Boot the addon.
-     */
-    public function boot()
-    {
-        // Run extra post-boot registration logic here.
-        // Use method injection or commands to bring in services.
-    }
-
-    /**
-     * Map additional addon routes.
      *
-     * @param Router $router
+     * @param EloquentModel $model
      */
-    public function map(Router $router)
+    public function register(EloquentModel $model)
     {
-        // Register dynamic routes here for example.
-        // Use method injection or commands to bring in services.
+        $model->bind(
+            'reactions',
+            function ($type = null) {
+                /* @var EloquentModel $this */
+                $query = $this->morphMany(ReactionModel::class, 'subject', 'subject_type');
+
+                if ($type && is_string($type)) {
+                    $query->where('type', $type);
+                }
+
+                if ($type && is_array($type)) {
+                    $query->whereIn('type', $type);
+                }
+
+                return $query;
+            }
+        );
+
+        $model->bind(
+            'get_reactions',
+            function () {
+                /* @var EloquentModel $this */
+                return $this->reactions->getResults();
+            }
+        );
     }
 
 }

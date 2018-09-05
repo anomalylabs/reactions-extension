@@ -3,5 +3,5 @@
 return [
     'title'       => 'Reactions',
     'name'        => 'Reactions Extension',
-    'description' => ''
+    'description' => 'Add user reactions to your content.',
 ];

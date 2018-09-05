@@ -2,6 +2,13 @@
 
 use Anomaly\Streams\Platform\Database\Migration\Migration;
 
+/**
+ * Class AnomalyExtensionReactionsCreateReactionsFields
+ *
+ * @link   http://pyrocms.com/
+ * @author PyroCMS, Inc. <support@pyrocms.com>
+ * @author Ryan Thompson <ryan@pyrocms.com>
+ */
 class AnomalyExtensionReactionsCreateReactionsFields extends Migration
 {
 
@@ -11,12 +18,14 @@ class AnomalyExtensionReactionsCreateReactionsFields extends Migration
      * @var array
      */
     protected $fields = [
-        'name' => 'anomaly.field_type.text',
-        'slug' => [
-            'type' => 'anomaly.field_type.slug',
+        'type'       => 'anomaly.field_type.text',
+        'subject'    => 'anomaly.field_type.polymorphic',
+        'ip_address' => 'anomaly.field_type.text',
+        'user'       => [
+            'type'   => 'anomaly.field_type.relationship',
             'config' => [
-                'slugify' => 'name',
-                'type' => '_'
+                'mode'    => 'lookup',
+                'related' => 'Anomaly\UsersModule\User\UserModel',
             ],
         ],
     ];

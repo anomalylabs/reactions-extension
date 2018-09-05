@@ -1,6 +1,34 @@
 {
     "name": "anomaly/reactions-extension",
     "type": "streams-addon",
+    "description": "Add user reactions to your content.",
+    "keywords": [
+        "streams module",
+        "emoji plugin",
+        "plugin"
+    ],
+    "homepage": "http://pyrocms.com/",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "PyroCMS, Inc.",
+            "email": "support@pyrocms.com",
+            "homepage": "http://pyrocms.com/",
+            "role": "Owner"
+        },
+        {
+            "name": "Ryan Thompson",
+            "email": "ryan@pyrocms.com",
+            "homepage": "http://ryanthepyro.com/",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "email": "support@pyrocms.com"
+    },
+    "require": {
+        "anomaly/emoji-plugin": "^1.0"
+    },
     "autoload": {
         "psr-4": {
             "Anomaly\\ReactionsExtension\\": "src/"

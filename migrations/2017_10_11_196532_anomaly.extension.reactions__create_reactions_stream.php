@@ -3,13 +3,13 @@
 use Anomaly\Streams\Platform\Database\Migration\Migration;
 
 /**
- * Class AnomalyExtensionEmojiCreateReactionsStream
+ * Class AnomalyExtensionReactionsCreateReactionsStream
  *
  * @link   http://pyrocms.com/
  * @author PyroCMS, Inc. <support@pyrocms.com>
  * @author Ryan Thompson <ryan@pyrocms.com>
  */
-class AnomalyExtensionEmojiCreateReactionsStream extends Migration
+class AnomalyExtensionReactionsCreateReactionsStream extends Migration
 {
 
     /**
@@ -27,7 +27,7 @@ class AnomalyExtensionEmojiCreateReactionsStream extends Migration
      * @var array
      */
     protected $assignments = [
-        'emoji'      => [
+        'type'       => [
             'required' => true,
         ],
         'subject'    => [
@@ -36,6 +36,7 @@ class AnomalyExtensionEmojiCreateReactionsStream extends Migration
         'ip_address' => [
             'required' => true,
         ],
+        'user',
     ];
 
 }

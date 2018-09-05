@@ -4,6 +4,13 @@ use Anomaly\ReactionsExtension\Reaction\Form\ReactionFormBuilder;
 use Anomaly\ReactionsExtension\Reaction\Table\ReactionTableBuilder;
 use Anomaly\Streams\Platform\Http\Controller\AdminController;
 
+/**
+ * Class ReactionsController
+ *
+ * @link   http://pyrocms.com/
+ * @author PyroCMS, Inc. <support@pyrocms.com>
+ * @author Ryan Thompson <ryan@pyrocms.com>
+ */
 class ReactionsController extends AdminController
 {
 
@@ -33,7 +40,7 @@ class ReactionsController extends AdminController
      * Edit an existing entry.
      *
      * @param ReactionFormBuilder $form
-     * @param        $id
+     * @param                     $id
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function edit(ReactionFormBuilder $form, $id)
